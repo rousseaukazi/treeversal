@@ -1,0 +1,29 @@
+# Future Treeversal Application - Definitions
+
+## Core Concepts
+
+**Future Treeversal**: The entire process of navigating through decision trees to explore potential futures based on probabilistic outcomes.
+
+**Node**: Each decision point in the tree where the user is presented with multiple possible futures. Nodes are numbered sequentially (1, 2, 3, etc.).
+
+**Paths**: The 5 potential futures presented at each node. These represent different probabilistic outcomes following a normal distribution:
+- Path options alternate between letters [a, b, c, d, e] and numbers [1, 2, 3, 4, 5]
+- Distribution: small % hyper conservative, large % middle-of-road, small % hyper aggressive
+
+**Treeversal**: The final alphanumeric string representing the complete path taken through the decision tree (e.g., "a3c1b" would represent the sequence of choices made).
+
+## Application Flow
+
+1. Start at Node 1
+2. Present 5 paths labeled [a, b, c, d, e]
+3. User selects one letter
+4. Move to next level, present 5 paths labeled [1, 2, 3, 4, 5]
+5. User selects one number
+6. Continue alternating between letters and numbers
+7. Track the complete path as the Treeversal string
+
+## Technical Implementation Notes
+
+- Each node alternates between letter choices (a-e) and number choices (1-5)
+- The Treeversal string grows with each selection
+- Users can trace back their decisions using the final Treeversal string 
