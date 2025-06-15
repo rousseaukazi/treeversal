@@ -330,7 +330,7 @@ export default function SharePage() {
                            y1={currentY}
                            x2={nextX}
                            y2={chosenBranchY}
-                           stroke={`url(#gradient-${level})`}
+                           stroke={isSameColor ? toColor : `url(#gradient-${level})`}
                            strokeWidth="4"
                            opacity="1"
                            className={isAnimating && currentPhase === 3 ? "draw-choice" : ""}

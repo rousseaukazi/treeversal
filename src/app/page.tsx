@@ -429,7 +429,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-purple-50/50"></div>
         
         {/* Header */}
-        <div className="relative z-10 text-center py-8 px-8 flex-shrink-0">
+        <div className="relative z-10 text-center pt-8 pb-0 px-8 flex-shrink-0 bg-white/0">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">
             {getChoiceSetTitle()}
           </h2>
@@ -439,7 +439,7 @@ export default function Home() {
         </div>
 
         {/* Scrollable content area */}
-        <div className="relative z-10 flex-1 overflow-y-auto px-8 pb-8">
+        <div className="relative z-20 flex-1 overflow-y-auto px-8 pt-8 pb-8">
           <div className="flex flex-col gap-4 max-w-2xl mx-auto w-full">
             {choices.map((choice, index) => {
               const colors = getButtonColors(index)
@@ -677,7 +677,7 @@ export default function Home() {
                                y1={currentY}
                                x2={nextX}
                                y2={chosenBranchY}
-                               stroke={`url(#gradient-${level})`}
+                               stroke={isSameColor ? toColor : `url(#gradient-${level})`}
                                strokeWidth="4"
                                opacity="1"
                                className={state.isAnimating && currentPhase === 3 ? "draw-choice" : ""}
