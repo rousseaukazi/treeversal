@@ -8,7 +8,7 @@ type Choice = {
   distribution: string
 }
 
-interface TreeversalState {
+interface TreecognitionState {
   currentChoice: Choice
   treeversal: Choice[]
   expectingLetters: boolean
@@ -82,7 +82,7 @@ const RISK_COLORS = {
 } as const
 
 export default function Home() {
-  const [state, setState] = useState<TreeversalState>({
+  const [state, setState] = useState<TreecognitionState>({
     currentChoice: { id: '1', text: 'Begin your exploration of probabilistic futures. You will navigate through different scenarios, each building upon your previous choices to create a unique path through potential futures.', distribution: 'Start' },
     treeversal: [],
     expectingLetters: false,
@@ -94,7 +94,7 @@ export default function Home() {
 
   // Initialize logging
   useEffect(() => {
-    console.log('🚀 PreCog Future Treeversal initialized')
+    console.log('�� PreCog Future Treecognition initialized')
     console.log('📊 Initial state:', state)
   }, [])
 
@@ -212,9 +212,9 @@ export default function Home() {
     }, 300)
   }
 
-  const resetTreeversal = () => {
-    console.log('🔄 Treeversal reset triggered')
-    console.log('📈 Final treeversal path was:', state.treeversal.map(c => `${c.id}(${c.distribution})`).join(' → '))
+  const resetTreecognition = () => {
+    console.log('🔄 Treecognition reset triggered')
+    console.log('📈 Final treecognition path was:', state.treeversal.map(c => `${c.id}(${c.distribution})`).join(' → '))
     console.log('📊 Total choices made:', state.treeversal.length)
     
     setState({
@@ -227,7 +227,7 @@ export default function Home() {
       isAnimating: false
     })
     
-    console.log('✅ Treeversal reset complete - back to initial state')
+    console.log('✅ Treecognition reset complete - back to initial state')
   }
 
   const openModal = () => {
@@ -374,7 +374,7 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       {/* Left Side - Current Choice Display */}
-      <div className="flex-1 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col relative overflow-hidden">
+      <div className="w-[35%] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
         <div className="absolute top-0 left-0 w-full h-full">
@@ -401,7 +401,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Left Side Footer - Treeversal Tracker */}
+        {/* Left Side Footer - Treecognition Tracker */}
         <div className="relative z-10 bg-black/20 backdrop-blur-sm border-t border-white/10 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -414,7 +414,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              onClick={state.treeversal.length > 0 ? openModal : resetTreeversal}
+              onClick={state.treeversal.length > 0 ? openModal : resetTreecognition}
               className="bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 backdrop-blur-sm"
             >
               {state.treeversal.length > 0 ? 'View' : 'Reset'}
@@ -424,23 +424,23 @@ export default function Home() {
       </div>
 
       {/* Right Side - Choice Options */}
-      <div className="flex-1 bg-gradient-to-br from-gray-50 to-white flex flex-col relative h-screen overflow-hidden">
+      <div className="w-[65%] bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex flex-col relative h-screen overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-purple-50/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-100/20 via-amber-100/15 to-yellow-100/25"></div>
         
         {/* Header */}
         <div className="relative z-10 text-center pt-8 pb-0 px-8 flex-shrink-0 bg-white/0">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-2">
             {getChoiceSetTitle()}
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-base text-gray-600">
             Use hotkeys 1-5 for quick selection
           </p>
         </div>
 
         {/* Scrollable content area */}
-        <div className="relative z-20 flex-1 overflow-y-auto px-8 pt-8 pb-8">
-          <div className="flex flex-col gap-4 max-w-2xl mx-auto w-full">
+        <div className="relative z-20 flex-1 overflow-y-auto px-12 pt-12 pb-12">
+          <div className="flex flex-col gap-8 max-w-5xl mx-auto w-full">
             {choices.map((choice, index) => {
               const colors = getButtonColors(index)
               const isSelected = state.selectedIndex === index
@@ -458,7 +458,7 @@ export default function Home() {
                     handleChoice(choice, index);
                   }}
                   disabled={state.selectedIndex !== null}
-                  className={`${colors.bg} ${colors.border} py-6 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl border-2 relative overflow-hidden text-left`}
+                  className={`${colors.bg} ${colors.border} py-10 px-8 rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl border-2 relative overflow-hidden text-left`}
                 >
                   {/* Loading animation overlay */}
                   {isSelected && (
@@ -469,12 +469,12 @@ export default function Home() {
                   
                   <div className="relative z-10">
                     <div className="flex justify-start mb-2">
-                      <div className={`text-xs bg-black/10 rounded px-2 py-1 font-bold uppercase tracking-wide ${colors.accent}`}>
+                      <div className={`text-sm bg-black/10 rounded px-3 py-2 font-bold uppercase tracking-wide ${colors.accent}`}>
                         {choice.distribution}
                       </div>
                     </div>
-                    <div className={`text-sm leading-relaxed ${colors.text}`}>
-                      <span className={`${colors.accent} mr-1`}>{choice.id}.</span>
+                    <div className={`text-lg leading-relaxed ${colors.text}`}>
+                      <span className={`${colors.accent} mr-2 text-xl font-semibold`}>{choice.id}.</span>
                       {choice.text}
                     </div>
                   </div>
@@ -492,7 +492,7 @@ export default function Home() {
             {/* Modal Header */}
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
               <div>
-                <h2 className="text-2xl font-semibold text-gray-800">Treeversal Journey</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Treecognition Journey</h2>
                 <p className="text-sm text-gray-500 mt-1">Your path through probabilistic futures</p>
               </div>
               <div className="flex gap-3">
@@ -506,7 +506,7 @@ export default function Home() {
                     const shareUrl = `${window.location.origin}/share/${treversalData}`
                     navigator.clipboard.writeText(shareUrl)
                     console.log('Share URL generated:', shareUrl)
-                    console.log('Treeversal data:', state.treeversal)
+                    console.log('Treecognition data:', state.treeversal)
                     alert('Share URL copied to clipboard!')
                   }}
                   className="bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
