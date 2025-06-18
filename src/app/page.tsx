@@ -374,7 +374,7 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       {/* Left Side - Current Choice Display */}
-      <div className="w-[35%] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col relative overflow-hidden">
+      <div className="w-[45%] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
         <div className="absolute top-0 left-0 w-full h-full">
@@ -424,9 +424,9 @@ export default function Home() {
       </div>
 
       {/* Right Side - Choice Options */}
-      <div className="w-[65%] bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex flex-col relative h-screen overflow-hidden">
+      <div className="w-[55%] bg-gradient-to-br from-orange-50/50 via-amber-50/50 to-yellow-50/50 flex flex-col relative h-screen overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-100/20 via-amber-100/15 to-yellow-100/25"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/15 via-amber-50/10 to-yellow-50/20"></div>
         
         {/* Header */}
         <div className="relative z-10 text-center pt-8 pb-0 px-8 flex-shrink-0 bg-white/0">
