@@ -241,7 +241,7 @@ export default function SharePage() {
                 </div>
               </div>
               <div className="text-white/90">
-                <div className="text-lg leading-relaxed prose prose-invert max-w-none mb-4">
+                <div className="text-lg prose prose-invert prose-stone max-w-none markdown-content markdown-content-dark max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent mb-4">
                   <ReactMarkdown>
                     {state.treeData?.worldState.description || "Loading..."}
                   </ReactMarkdown>
@@ -251,7 +251,7 @@ export default function SharePage() {
                   {state.treeData?.worldState.currentDate}
                 </div>
 
-                {/* Key Players Tags */}
+                {/* Key Players Tags - always show on share page since it shows world state */}
                 {state.treeData?.worldState.keyPlayers &&
                   state.treeData.worldState.keyPlayers.length > 0 && (
                     <div className="mt-4">

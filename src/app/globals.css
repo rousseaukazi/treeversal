@@ -9,4 +9,56 @@
   100% {
     width: 100%;
   }
+}
+
+/* Enhanced ReactMarkdown styling */
+.markdown-content {
+  @apply text-inherit leading-relaxed;
+}
+
+.markdown-content p {
+  @apply mb-4 last:mb-0;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  @apply font-semibold mb-3 mt-6 first:mt-0;
+}
+
+.markdown-content h1 { @apply text-xl; }
+.markdown-content h2 { @apply text-lg; }
+.markdown-content h3 { @apply text-base; }
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply mb-4 pl-6;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content strong {
+  @apply font-semibold;
+}
+
+.markdown-content em {
+  @apply italic;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-current pl-4 italic mb-4 opacity-80;
+}
+
+.markdown-content code {
+  @apply bg-black/10 px-1 py-0.5 rounded text-sm font-mono;
+}
+
+/* Dark theme variations */
+.markdown-content-dark code {
+  @apply bg-white/10;
 } 

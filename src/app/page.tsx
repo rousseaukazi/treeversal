@@ -96,7 +96,7 @@ export default function Home() {
         setState((prev) => ({
           ...prev,
           treeData,
-          currentNodeId: treeData.rootNodeId,
+          currentNodeId: null, // Start with no current node to show world state
           visitedPath: [],
           loading: false,
           error: null,
@@ -130,12 +130,28 @@ export default function Home() {
   }, [state.visitedPath, state.currentNodeId, state.treeData]);
 
   const getCurrentChoices = (): TreeNode[] => {
-    if (!state.treeData || !state.currentNodeId) return [];
+    if (!state.treeData) return [];
+
+    // If we haven't made any choices yet, show the depth 0 nodes (first decision from world state)
+    if (state.visitedPath.length === 0) {
+      return Object.values(state.treeData.nodes).filter(
+        (node) => node.depth === 0
+      );
+    }
+
+    // Otherwise, get choices from current node
+    if (!state.currentNodeId) return [];
     return getNodeChoices(state.treeData, state.currentNodeId);
   };
 
   const getCurrentNode = (): TreeNode | null => {
-    if (!state.treeData || !state.currentNodeId) return null;
+    if (!state.treeData) return null;
+
+    // If we haven't made any choices yet, return null to show world state
+    if (state.visitedPath.length === 0) return null;
+
+    // Otherwise, get the current node
+    if (!state.currentNodeId) return null;
     return getNodeById(state.treeData, state.currentNodeId);
   };
 
@@ -188,19 +204,17 @@ export default function Home() {
       const newPath = [...prev.visitedPath];
       const previousNodeId = newPath.pop();
       const parentNodeId =
-        newPath.length > 0
-          ? newPath[newPath.length - 1]
-          : prev.treeData?.rootNodeId;
+        newPath.length > 0 ? newPath[newPath.length - 1] : null; // Go back to world state
 
       console.log("✅ Back navigation complete:", {
         fromNodeId: previousNodeId,
-        toNodeId: parentNodeId,
+        toNodeId: parentNodeId || "world state",
         newPathLength: newPath.length,
       });
 
       return {
         ...prev,
-        currentNodeId: parentNodeId || prev.treeData?.rootNodeId || null,
+        currentNodeId: parentNodeId,
         visitedPath: newPath,
         selectedIndex: null,
         showModal: false,
@@ -221,7 +235,7 @@ export default function Home() {
 
     setState((prev) => ({
       ...prev,
-      currentNodeId: prev.treeData?.rootNodeId || null,
+      currentNodeId: null, // Reset to world state
       visitedPath: [],
       selectedIndex: null,
       showModal: false,
@@ -439,7 +453,7 @@ export default function Home() {
     );
   }
 
-  if (!state.treeData || !currentNode) {
+  if (!state.treeData) {
     return (
       <div className="flex h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <div className="text-white text-xl">No tree data available</div>
@@ -466,37 +480,47 @@ export default function Home() {
             <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl p-8 text-left">
               <div className="flex justify-start mb-4">
                 <div className="text-xs bg-white/20 rounded px-3 py-2 font-bold uppercase tracking-wide text-white/90">
-                  Current Future
+                  {state.visitedPath.length === 0
+                    ? "World State"
+                    : "Current Future"}
                 </div>
               </div>
               <div className="text-white/90">
-                <div className="text-lg leading-relaxed prose prose-invert max-w-none">
-                  <ReactMarkdown>{currentNode.worldUpdate}</ReactMarkdown>
+                <div className="text-lg prose prose-invert prose-stone max-w-none markdown-content markdown-content-dark max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                  <ReactMarkdown>
+                    {state.visitedPath.length === 0
+                      ? state.treeData.worldState.description
+                      : currentNode?.worldUpdate || "Loading..."}
+                  </ReactMarkdown>
                 </div>
                 <div className="text-sm text-white/70 mt-4">
-                  <strong>Date:</strong> {currentNode.timelineDate}
+                  <strong>Date:</strong>{" "}
+                  {state.visitedPath.length === 0
+                    ? state.treeData.worldState.currentDate
+                    : currentNode?.timelineDate || "Loading..."}
                 </div>
 
-                {/* Key Players Tags */}
-                {state.treeData.worldState.keyPlayers.length > 0 && (
-                  <div className="mt-4">
-                    <div className="text-xs text-white/60 mb-2 font-medium">
-                      Key Players:
+                {/* Key Players Tags - only show on world state */}
+                {state.visitedPath.length === 0 &&
+                  state.treeData.worldState.keyPlayers.length > 0 && (
+                    <div className="mt-4">
+                      <div className="text-xs text-white/60 mb-2 font-medium">
+                        Key Players:
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {state.treeData.worldState.keyPlayers.map(
+                          (player, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-white/20 text-white/80 text-xs rounded-full border border-white/30"
+                            >
+                              {player}
+                            </span>
+                          )
+                        )}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {state.treeData.worldState.keyPlayers.map(
-                        (player, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-white/20 text-white/80 text-xs rounded-full border border-white/30"
-                          >
-                            {player}
-                          </span>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
+                  )}
               </div>
             </div>
           </div>
@@ -543,7 +567,7 @@ export default function Home() {
         {/* Header */}
         <div className="relative z-10 text-center pt-8 pb-0 px-8 flex-shrink-0 bg-white/0">
           <h2 className="text-3xl font-semibold text-gray-800 mb-2">
-            {currentNode.title}
+            {currentNode ? currentNode.title : "Choose Your Path"}
           </h2>
           <p className="text-base text-gray-600">
             Use hotkeys 1-3 for quick selection • Backspace to go back
