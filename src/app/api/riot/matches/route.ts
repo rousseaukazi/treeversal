@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMatchIds, getMatchById, getDDragonVersion } from '@/lib/riot';
+import { isDemoMode, getDemoMatches } from '@/lib/demoData';
 import type { MatchData } from '@/lib/riot';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const puuid = searchParams.get('puuid');
-  const count = parseInt(searchParams.get('count') || '20', 10);
-  const start = parseInt(searchParams.get('start') || '0', 10);
 
   if (!puuid) {
     return NextResponse.json(
@@ -15,12 +16,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!process.env.RIOT_API_KEY || process.env.RIOT_API_KEY === 'RGAPI-your-key-here') {
-    return NextResponse.json(
-      { error: 'RIOT_API_KEY is not configured. Get one at https://developer.riotgames.com/' },
-      { status: 500 }
-    );
+  // Demo mode — return mock data when no API key is set
+  if (isDemoMode()) {
+    return NextResponse.json(getDemoMatches());
   }
+
+  const count = parseInt(searchParams.get('count') || '20', 10);
+  const start = parseInt(searchParams.get('start') || '0', 10);
 
   try {
     const [matchIds, version] = await Promise.all([

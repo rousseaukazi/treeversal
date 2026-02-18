@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountByRiotId, getSummonerByPuuid, getDDragonVersion, getProfileIconUrl } from '@/lib/riot';
+import { isDemoMode, getDemoAccount } from '@/lib/demoData';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -13,11 +16,9 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!process.env.RIOT_API_KEY || process.env.RIOT_API_KEY === 'RGAPI-your-key-here') {
-    return NextResponse.json(
-      { error: 'RIOT_API_KEY is not configured. Get one at https://developer.riotgames.com/' },
-      { status: 500 }
-    );
+  // Demo mode — return mock data when no API key is set
+  if (isDemoMode()) {
+    return NextResponse.json(getDemoAccount());
   }
 
   try {

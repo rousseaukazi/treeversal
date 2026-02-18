@@ -8,7 +8,7 @@ import {
   getSummonerSpellIconUrl,
   getQueueName,
 } from '@/lib/riot';
-import type { MatchData, MatchParticipant } from '@/lib/riot';
+import type { MatchData } from '@/lib/riot';
 
 // ---- Types for API responses ----
 
@@ -20,12 +20,14 @@ interface AccountData {
   profileIconId: number;
   profileIconUrl: string;
   ddragonVersion: string;
+  isDemo?: boolean;
 }
 
-interface MatchesResponse {
+interface MatchesResponseExt {
   matchIds: string[];
   matches: MatchData[];
   ddragonVersion: string;
+  isDemo?: boolean;
 }
 
 // ---- Helper functions ----
@@ -297,6 +299,7 @@ export default function LoLDashboard() {
   const [loading, setLoading] = useState(false);
   const [loadingMatches, setLoadingMatches] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDemo, setIsDemo] = useState(false);
 
   const lookupAccount = useCallback(async () => {
     setLoading(true);
@@ -313,17 +316,19 @@ export default function LoLDashboard() {
 
       setAccount(data);
       setDdragonVersion(data.ddragonVersion);
+      if (data.isDemo) setIsDemo(true);
 
       // Now fetch matches
       setLoadingMatches(true);
       const matchRes = await fetch(
         `/api/riot/matches?puuid=${encodeURIComponent(data.puuid)}&count=20`
       );
-      const matchData: MatchesResponse = await matchRes.json();
+      const matchData: MatchesResponseExt = await matchRes.json();
       if (!matchRes.ok) throw new Error((matchData as unknown as { error: string }).error);
 
       setMatches(matchData.matches);
       setDdragonVersion(matchData.ddragonVersion);
+      if (matchData.isDemo) setIsDemo(true);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -358,6 +363,22 @@ export default function LoLDashboard() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
+        {/* Demo Banner */}
+        {isDemo && (
+          <div className="bg-amber-950/50 border border-amber-500/40 rounded-lg p-3 mb-6 text-amber-300 text-sm">
+            <strong>Demo Mode</strong> — Showing simulated match data. To see real data, add your{' '}
+            <a
+              href="https://developer.riotgames.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-amber-200"
+            >
+              Riot API key
+            </a>{' '}
+            as the <code className="bg-amber-900/50 px-1 rounded text-xs">RIOT_API_KEY</code> environment variable.
+          </div>
+        )}
+
         {/* Search */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-4">Game History Lookup</h1>
